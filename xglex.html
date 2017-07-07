@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head >
+  <!-- <meta http-equiv="refresh" content="20"> -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <title></title>
+
+  <link rel="stylesheet" href="css/stylemenu.css" media="screen" type="text/css" />
+  <script type="text/javascript">
+   function ajaxRequest(id,name,file)
+    {
+        if(window.ActiveXObject) // IE浏览器
+        {
+            xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        else if(window.XMLHttpRequest) // 除IE以外的其他浏览器
+        {
+            xmlHttpRequest = new XMLHttpRequest();
+        }
+        if(null != xmlHttpRequest)
+        {
+             // * GET方式向服务器发出一个请求
+            xmlHttpRequest.open("GET", "xglex.php?id="+id+"&name="+name+"&file="+file, true);
+             /*
+              * POST方式向服务器发出一个请求
+              */
+            // xmlHttpRequest.open("POST", "AjaxServlet", true);
+            // 当发生状态变化时就调用这个回调函数
+            xmlHttpRequest.onreadystatechange = ajaxCallBack;
+            // 使用post提交时必须加上下面这行代码
+            xmlHttpRequest.send();
+        }
+        var urll="http://127.0.0.1/test/"+file+".html";
+        window.open(urll);//弹窗已生成高亮的文件
+    }
+    function ajaxCallBack()
+    {
+        var val = 3;
+        if(xmlHttpRequest.readyState == 4)
+        {
+            if(xmlHttpRequest.status == 200)
+            {
+                var content = xmlHttpRequest.responseText;
+                alert(content);//测试回显
+                if(content.indexOf("send sucess")>= 0){
+                  alert("sucess!");
+                  window.opener.location.reload();
+                  window.close();
+                }else if(content.indexOf("cnnot send")>= 0){
+                  alert("error!");
+                  window.opener.location.reload(); //刷新父窗口中的网页
+                  window.close();//关闭当前窗窗口
+                }
+              }
+            }
+          }
+   function changename(){
+    var ids = "sid";
+    var id = document.getElementById(ids).value;
+    var sname = "sname";
+    var name = document.getElementById(sname).value;
+    var file = "file";
+    var file = document.getElementById(file).value;
+    // alert(id+name+file);
+    ajaxRequest(id,name,file);//向发送函数传递参数
+  }
+
+  </script>
+</head>
+
+<body>
+  <div>
+    <h1 align="center" style="color:#2AC6BF;">alter Keywords</h1>
+  </div>
+  <div class="on-off">
+   <!--  <div class="bodyy"></div> -->
+    <div class="bodyy">
+    <span>在</span>
+    <!-- 在 -->
+      <select name="sid" id="sid">
+      <option value="33">keyword</option>
+      <option value="39">ctype</option>
+      </select>
+      <br>
+    <span>添加关键词</span> 
+    <!-- 添加关键词 -->
+     <input type="text" name="sname" id="sname" /> 
+     <br><!-- onclick="gettime();" -->
+     <span>对文件名为</span>
+     <br>
+     <input type="text" name="file" id="file" /> 
+     <br>
+     <span>
+     的c语言文件进行高亮显示</span>
+     <br>
+      <button onclick="changename();">submit</button> 
+    </div>
+
+  </div>
+</div>
+<div style="text-align:center;clear:both;">
+
+</div>
+
+</body>
+
+</html>
